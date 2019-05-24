@@ -45,6 +45,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg void OnClosing();
+	afx_msg void OnOpen();
+	afx_msg void OnDeposit();
+	afx_msg void OnStats();
+	afx_msg void OnSystem();
+	afx_msg void OnTransfer();
+	afx_msg void OnWithdrawal();
 };
 
 #ifndef _DEBUG  // HXView.cpp 中的调试版本

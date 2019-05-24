@@ -11,7 +11,13 @@
 
 #include "HXDoc.h"
 #include "HXView.h"
-
+#include "Open.h"
+#include "Closing.h"
+#include "Deposit.h"
+#include "Withdrawal.h"
+#include "Transfer.h"
+#include "Stats.h"
+#include "Sys.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -29,6 +35,13 @@ BEGIN_MESSAGE_MAP(CHXView, CView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
 	ON_WM_ERASEBKGND()
+	ON_COMMAND(ID_CLOSING, &CHXView::OnClosing)
+	ON_COMMAND(ID_OPEN, &CHXView::OnOpen)
+	ON_COMMAND(ID_DEPOSIT, &CHXView::OnDeposit)
+	ON_COMMAND(ID_STATS, &CHXView::OnStats)
+	ON_COMMAND(ID_SYSTEM, &CHXView::OnSystem)
+	ON_COMMAND(ID_TRANSFER, &CHXView::OnTransfer)
+	ON_COMMAND(ID_WITHDRAWAL, &CHXView::OnWithdrawal)
 END_MESSAGE_MAP()
 
 // CHXView 构造/析构
@@ -145,4 +158,60 @@ BOOL CHXView::OnEraseBkgnd(CDC* pDC)
 	graphics.DrawCachedBitmap(&cachedBmp, 0, 0);
 	return TRUE;
 	return CView::OnEraseBkgnd(pDC);
+}
+
+
+void CHXView::OnClosing()
+{
+	// TODO: 在此添加命令处理程序代码
+	Closing closing;
+	closing.DoModal();
+}
+
+
+void CHXView::OnOpen()
+{
+	// TODO: 在此添加命令处理程序代码
+	Open open;
+	open.DoModal();
+}
+
+
+void CHXView::OnDeposit()
+{
+	// TODO: 在此添加命令处理程序代码
+	Deposit deposit;
+	deposit.DoModal();
+}
+
+
+void CHXView::OnStats()
+{
+	// TODO: 在此添加命令处理程序代码
+	Stats stats;
+	stats.DoModal();
+}
+
+
+void CHXView::OnSystem()
+{
+	// TODO: 在此添加命令处理程序代码
+	Sys sys;
+	sys.DoModal();
+}
+
+
+void CHXView::OnTransfer()
+{
+	// TODO: 在此添加命令处理程序代码
+	Transfer transfer;
+	transfer.DoModal();
+}
+
+
+void CHXView::OnWithdrawal()
+{
+	// TODO: 在此添加命令处理程序代码
+	Withdrawal withdrawal;
+	withdrawal.DoModal();
 }
