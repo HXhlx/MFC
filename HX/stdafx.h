@@ -40,7 +40,8 @@
 
 
 
-
+#include <gdiplus.h>
+using namespace Gdiplus;
 
 
 

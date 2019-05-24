@@ -19,7 +19,7 @@ class CHXApp : public CWinAppEx
 public:
 	CHXApp();
 
-
+	ULONG_PTR m_token;
 // ÖØÐ´
 public:
 	virtual BOOL InitInstance();
