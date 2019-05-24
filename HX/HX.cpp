@@ -178,6 +178,8 @@ protected:
 // й╣ож
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+//	virtual BOOL OnInitDialog();
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
