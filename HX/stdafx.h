@@ -39,9 +39,9 @@
 
 
 
-
 #include <gdiplus.h>
 using namespace Gdiplus;
+#import "c:\program files\common files\system\ado\msado15.dll" no_namespace rename("EOF", "adoEOF")
 
 
 

@@ -10,14 +10,14 @@
 
 #include "HXDoc.h"
 #include "HXView.h"
-
+#include "Login.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 
 // CHXApp
-
+_RecordsetPtr m_pRecordset;
 BEGIN_MESSAGE_MAP(CHXApp, CWinAppEx)
 	ON_COMMAND(ID_APP_ABOUT, &CHXApp::OnAppAbout)
 	// 基于文件的标准文档命令
@@ -71,20 +71,30 @@ BOOL CHXApp::InitInstance()
 	InitCommonControlsEx(&InitCtrls);
 
 	CWinAppEx::InitInstance();
-
 	Gdiplus::GdiplusStartupInput input = 0;
 	Gdiplus::GdiplusStartup(&m_token, &input, 0);
+	//HRESULT hr = m_pConnection.CreateInstance("ADODB.Connection");
 	// 初始化 OLE 库
 	if (!AfxOleInit())
 	{
 		AfxMessageBox(IDP_OLE_INIT_FAILED);
 		return FALSE;
 	}
-
+	HRESULT hr = m_pConnection.CreateInstance("ADODB.Connection");
+	try
+	{
+		m_pConnection->Open("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=bank.accdb", "", "", adModeUnknown);
+	}
+	catch (_com_error e)
+	{
+		AfxMessageBox(e.Description());
+	}
+	
 	AfxEnableControlContainer();
 
 	EnableTaskbarInteraction(FALSE);
-
+	Login user;
+	user.DoModal();
 	// 使用 RichEdit 控件需要  AfxInitRichEdit2()	
 	// AfxInitRichEdit2();
 
@@ -108,7 +118,7 @@ BOOL CHXApp::InitInstance()
 	ttParams.m_bVislManagerTheme = TRUE;
 	theApp.GetTooltipManager()->SetTooltipParams(AFX_TOOLTIP_TYPE_ALL,
 		RUNTIME_CLASS(CMFCToolTipCtrl), &ttParams);
-
+	
 	// 注册应用程序的文档模板。文档模板
 	// 将用作文档、框架窗口和视图之间的连接
 	CSingleDocTemplate* pDocTemplate;
@@ -145,7 +155,7 @@ int CHXApp::ExitInstance()
 {
 	//TODO: 处理可能已添加的附加资源
 	AfxOleTerm(FALSE);
-
+	
 	return CWinAppEx::ExitInstance();
 }
 
@@ -159,7 +169,7 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// 对话框数据
+	// 对话框数据
 	enum { IDD = IDD_ABOUTBOX };
 
 protected:
@@ -210,5 +220,15 @@ void CHXApp::SaveCustomState()
 
 // CHXApp 消息处理程序
 
+void GetRecord(const CString SQL)
+{
+	m_pRecordset.CreateInstance("ADODB.Recordset");
+	m_pRecordset->Open((_variant_t)SQL, _variant_t((IDispatch*)theApp.m_pConnection, true), adOpenStatic, adLockOptimistic, adCmdText);
+}
 
-
+CString GetFieldValue(long index)
+{
+	_variant_t vIndex = (long)index, vValue = m_pRecordset->GetCollect(vIndex);
+	if (vValue.vt == VT_NULL)return "";
+	return  (LPCTSTR)(_bstr_t)vValue;
+}

@@ -18,7 +18,7 @@ class CHXApp : public CWinAppEx
 {
 public:
 	CHXApp();
-
+	_ConnectionPtr m_pConnection;
 	ULONG_PTR m_token;
 // 重写
 public:
@@ -38,3 +38,6 @@ public:
 };
 
 extern CHXApp theApp;
+extern _RecordsetPtr m_pRecordset;
+extern void GetRecord(const CString SQL);//获取记录集
+extern CString  GetFieldValue(long index);//取记录集字段信息

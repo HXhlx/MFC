@@ -16,6 +16,13 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
-
+	
 	DECLARE_MESSAGE_MAP()
+public:
+	CComboBox limit;
+	CString slimit;
+	CString password;
+	CString user;
+	afx_msg void OnBnClickedOk();
+	virtual BOOL OnInitDialog();
 };
