@@ -28,6 +28,7 @@ BEGIN_MESSAGE_MAP(CHXView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CHXView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // CHXView 构造/析构
@@ -125,3 +126,23 @@ CHXDoc* CHXView::GetDocument() const // 非调试版本是内联的
 
 
 // CHXView 消息处理程序
+
+
+BOOL CHXView::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CRect rect;
+	GetClientRect(rect);
+	Bitmap bmp(rect.Width(), rect.Height());
+	Graphics bmpGraphics(&bmp);
+	bmpGraphics.SetSmoothingMode(SmoothingModeAntiAlias);
+	SolidBrush  brushBlack(Color(255, 255, 255));
+	CString bkimg = "background.jpg";
+	Image bkmain(bkimg.AllocSysString());
+	bmpGraphics.DrawImage(&bkmain, 0, 0, rect.Width(), rect.Height());
+	Graphics graphics(pDC->m_hDC);
+	CachedBitmap cachedBmp(&bmp, &graphics);
+	graphics.DrawCachedBitmap(&cachedBmp, 0, 0);
+	return TRUE;
+	return CView::OnEraseBkgnd(pDC);
+}

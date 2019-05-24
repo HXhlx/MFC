@@ -168,8 +168,6 @@ protected:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
@@ -182,7 +180,6 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
-	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 // 用于运行对话框的应用程序命令
@@ -215,23 +212,3 @@ void CHXApp::SaveCustomState()
 
 
 
-
-
-BOOL CAboutDlg::OnEraseBkgnd(CDC* pDC)
-{
-	// TODO: 在此添加消息处理程序代码和/或调用默认值
-	CRect rect;
-	GetClientRect(rect);
-	Bitmap bmp(rect.Width(), rect.Height());
-	Graphics bmpGraphics(&bmp);
-	bmpGraphics.SetSmoothingMode(SmoothingModeAntiAlias);
-	SolidBrush  brushBlack(Color(255, 255, 255));
-	CString bkimg = "background.jpg";
-	Image bkmain(bkimg.AllocSysString());
-	bmpGraphics.DrawImage(&bkmain, 0, 0, rect.Width(), rect.Height());
-	Graphics graphics(pDC->m_hDC);
-	CachedBitmap cachedBmp(&bmp, &graphics);
-	graphics.DrawCachedBitmap(&cachedBmp, 0, 0);
-	return TRUE;
-	return CDialogEx::OnEraseBkgnd(pDC);
-}
