@@ -23,6 +23,7 @@ public:
 	bool flag;
 	int n;
 	virtual BOOL OnInitDialog();
+	CTime time;
 	CComboBox province1;
 	CComboBox province2;
 	CComboBox city1;
