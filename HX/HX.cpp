@@ -94,7 +94,7 @@ BOOL CHXApp::InitInstance()
 
 	EnableTaskbarInteraction(FALSE);
 	Login user;
-	user.DoModal();
+	if (user.DoModal() == IDCANCEL)return FALSE;
 	// 使用 RichEdit 控件需要  AfxInitRichEdit2()	
 	// AfxInitRichEdit2();
 

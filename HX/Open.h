@@ -12,7 +12,7 @@ public:
 	Open(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~Open();
 
-// 对话框数据
+	// 对话框数据
 	enum { IDD = IDD_OPEN };
 
 protected:
@@ -21,6 +21,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	bool flag;
+	int n;
 	virtual BOOL OnInitDialog();
 	CComboBox province1;
 	CComboBox province2;
@@ -45,4 +46,13 @@ public:
 	afx_msg void OnSetfocusPasswordo();
 	afx_msg void OnKillfocusPasssure();
 	afx_msg void OnKillfocusPasswordo();
+	afx_msg void OnSelchangeType();
+	CString stype;
+	afx_msg void OnKillfocusId();
+	afx_msg void OnClickInformation(NMHDR* pNMHDR, LRESULT* pResult);
+	CString sprovince2;
+	CString scity2;
+	CString scity1;
+	afx_msg void OnSelchangeProvince2();
+	void SelchangeProvince(CComboBox&, CString&, CString&);
 };
