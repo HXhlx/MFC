@@ -116,6 +116,7 @@ BOOL Closing::OnInitDialog()
 	// TODO:  在此添加额外的初始化
 	CRect rect;
 	CString str[] = { "姓名","账号","开户金额","账户余额","开户日期","账号类型" };
+	information.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 	information.GetClientRect(rect);
 	for (int i = 0; i < 6; i++)information.InsertColumn(i, str[i], LVCFMT_CENTER, rect.right / 6);
 	return TRUE;  // return TRUE unless you set the focus to a control
