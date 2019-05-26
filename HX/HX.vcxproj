@@ -99,6 +99,7 @@
     <None Include="res\HX.ico" />
     <None Include="res\HX.rc2" />
     <None Include="res\HXDoc.ico" />
+    <None Include="res\Icon.bmp" />
     <None Include="res\Toolbar.bmp" />
     <None Include="res\Toolbar256.bmp" />
     <None Include="UserImages.bmp" />
