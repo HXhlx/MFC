@@ -154,21 +154,33 @@ void Deposit::OnMaxtextPasssure()
 		UpdateData(FALSE);
 		return;
 	}
-	COleDateTime timestart = COleDateTime::GetCurrentTime(), timend;
-	CString scharge;
-	scharge.Format("%.2f", charge);
 	COleDateTimeSpan timespan(long(365 * Ttime), 0, 0, 0);
-	timend = timestart + timespan;
-	CString str[] = { GetFieldValue(0),GetFieldValue(1),scharge,stype,timestart.Format("%Y/%m/%d %H:%M:%S"),timend.Format("%Y/%m/%d %H:%M:%S") };
-	information.InsertItem(0, str[0]);
-	for (int i = 1; i < 6; i++)information.SetItemText(0, i, str[i]);
+	COleDateTime timestart = COleDateTime::GetCurrentTime(), timend = timestart + timespan;
+	CString scharge, ccharge, Timend, name = GetFieldValue(0);
+	scharge.Format("%.2f", charge);
+	ccharge.Format("%.2f", atof(GetFieldValue(2)) + charge);
+	if (stype == "活期")Timend = "-";
+	else Timend = timend.Format("%Y/%m/%d %H:%M:%S");
+	GetRecord("update client set 账户余额=" + ccharge + " where 账号='" + ID + "'");
+	GetRecord("insert into activity (姓名,账号,交易金额,交易类型,交易时间,到期时间,操作) values ('" + name + "','" + ID + "','" + scharge + "','" + stype + "','" + timestart.Format("%Y/%m/%d %H:%M:%S") + "','" + Timend + "','存款')");
+	GetRecord("select 姓名,账号,交易金额,交易类型,交易时间,到期时间 from activity where 操作='存款'");
+	while (!m_pRecordset->adoEOF)
+	{
+		information.InsertItem(information.GetItemCount(), GetFieldValue(0));
+		for (int i = 1; i < 6; i++)information.SetItemText(information.GetItemCount() - 1, i, GetFieldValue(i));
+		m_pRecordset->MoveNext();
+	}
 }
 
 
 void Deposit::Rate()
 {
 	// TODO: 在此处添加实现代码.
-	if (stype == "活期")rate = 0.0035;
+	if (stype == "活期")
+	{
+		rate = 0.0035;
+		Ttime = 0;
+	}
 	else if (stime == "三个月")
 	{
 		Ttime = 0.25;

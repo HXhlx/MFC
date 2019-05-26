@@ -18,4 +18,15 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
 	DECLARE_MESSAGE_MAP()
+public:
+	CString ID;
+	CListCtrl information;
+	CString passsure;
+	CString password;
+	double charge;
+	virtual BOOL OnInitDialog();
+	afx_msg void OnSetfocusPassword();
+	afx_msg void OnKillfocusPassword();
+	afx_msg void OnKillfocusPasssure();
+	afx_msg void OnMaxtextPasssure();
 };
