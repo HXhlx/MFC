@@ -137,23 +137,16 @@ void Open::OnBnClickedSignin()
 	UpdateData();
 	CString s1[] = { ID,name,idcard,telephone,password,passsure }, s2[] = { "请选择账号类型!" ,"请输入姓名!","请输入身份证号!","请输入电话号码!","请输入密码!","请确认密码!" }, scharge;
 	scharge.Format("%.2f", charge);
-	CString s3[] = { ID,name,sprovince1 + " " + scity1,telephone,idcard };
+	CString s3[] = { idcard,name,sprovince1 + " " + scity1,telephone,ID };
 	for (int i = 0; i < 6; i++)if (s1[i] == "")
 	{
 		MessageBox(s2[i], "警告", MB_ICONWARNING);
 		return;
 	}
-	try
-	{
-		information.InsertItem(information.GetItemCount(), s3[0]);
-		for (int i = 1; i < 5; i++)information.SetItemText(information.GetItemCount() - 1, i, s3[i]);
-		GetRecord("insert into client (身份证号,姓名,地址,移动电话,账号,密码,开户金额,开户日期) values ('" + idcard + "','" + name + "','" + sprovince1 + " " + scity1 + "','" + telephone + "','" + ID + "','" + password + "','" + scharge + "','" + time.Format("%Y/%m/%d %H:%M:%S") + "')");
-		MessageBox("注册成功!");
-	}
-	catch (_com_error e)
-	{
-		MessageBox(e.Description());
-	}
+	information.InsertItem(information.GetItemCount(), s3[0]);
+	for (int i = 1; i < 5; i++)information.SetItemText(information.GetItemCount() - 1, i, s3[i]);
+	GetRecord("insert into client (身份证号,姓名,地址,移动电话,账号,密码,开户金额,账户余额,开户日期,账号类型) values ('" + idcard + "','" + name + "','" + sprovince1 + " " + scity1 + "','" + telephone + "','" + ID + "','" + password + "'," + scharge + "," + scharge + ",'" + time.Format("%Y/%m/%d %H:%M:%S") + "','" + stype + "')");
+	MessageBox("注册成功!");
 }
 
 
@@ -235,14 +228,24 @@ void Open::OnSelchangeType()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData();
-	static unsigned t = 1;
-	CString str = information.GetItemText(information.GetItemCount() - 1, 4);
+	unsigned t = 1;
+	CString str, st;
+	ID = "";
 	time = CTime::GetCurrentTime();
-	if (str == "" || str.Mid(6, 13) != time.Format("%Y%m%d"))t = 1;
-	ID.Format("%03d", t);
-	ID = time.Format("%Y%m%d") + ID;
-	if (stype == "活期")ID = "622752" + ID;
-	else ID = "409666" + ID;
+	if (stype == "活期")ID += "622752";
+	else ID += "409666";
+	ID += time.Format("%Y%m%d");
+	for (int i = information.GetItemCount() - 1; i >= 0; i--)
+	{
+		str = information.GetItemText(i, 4);
+		if (str.Left(6) == ID.Left(6) && str.Mid(6, 8) == time.Format("%Y%m%d"))
+		{
+			t = atoi(str.Right(3)) + 1;
+			break;
+		}
+	}
+	st.Format("%03d", t);
+	ID += st;
 	UpdateData(FALSE);
 }
 
@@ -265,6 +268,8 @@ void Open::OnClickInformation(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
 	n = pNMItemActivate->iItem;
+	province2.ResetContent();
+	city2.ResetContent();
 	if (n >= 0)
 	{
 		std::vector<CString>city;
