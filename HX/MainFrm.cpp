@@ -25,6 +25,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_COMMAND_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnApplicationLook)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_VIEW_APPLOOK_WIN_2000, ID_VIEW_APPLOOK_WINDOWS_7, &CMainFrame::OnUpdateApplicationLook)
 	ON_COMMAND(ID_EXIT, &CMainFrame::OnExit)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -128,8 +129,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	lstBasicCommands.AddTail(ID_VIEW_APPLOOK_WINDOWS_7);
 
 	CMFCToolBar::SetBasicCommands(lstBasicCommands);
-	SetMenu(NULL);
-	DrawMenuBar();
+	
 	return 0;
 }
 
@@ -299,4 +299,25 @@ void CMainFrame::OnExit()
 {
 	// TODO: 在此添加命令处理程序代码
 	PostQuitMessage(0);
+}
+
+
+void CMainFrame::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	COleDateTime time = COleDateTime::GetCurrentTime();
+	m_wndStatusBar.SetPaneText(0, time.Format("%Y/%m:%d %H:%M:%S"));
+	CFrameWndEx::OnTimer(nIDEvent);
+}
+
+
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
+{
+	// TODO: 在此添加专用代码和/或调用基类
+	SetMenu(NULL);
+	DrawMenuBar();
+	COleDateTime time = COleDateTime::GetCurrentTime();
+	m_wndStatusBar.SetPaneText(0, time.Format("%Y/%m:%d %H:%M:%S"));
+	SetTimer(1, 1000, NULL);
+	return CFrameWndEx::OnCreateClient(lpcs, pContext);
 }
