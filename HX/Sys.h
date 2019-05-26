@@ -18,4 +18,25 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
 	DECLARE_MESSAGE_MAP()
+public:
+	CComboBox limit;
+	CString slimit;
+	CString New;
+	CString Newsure;
+//	CEdit old;
+	CString passsure;
+	CString old;
+	CString password;
+	CString user;
+	CListBox userlist;
+	virtual BOOL OnInitDialog();
+	afx_msg void OnBnClickedLogout();
+	afx_msg void OnBnClickedAdd();
+	afx_msg void OnBnClickedChange();
+//	CButton logout;
+	afx_msg void OnSetfocusOld();
+	afx_msg void OnSetfocusNew();
+	afx_msg void OnSetfocusNewsure();
+	int n;
+	afx_msg void OnKillfocusUserlist();
 };
