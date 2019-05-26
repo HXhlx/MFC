@@ -135,7 +135,7 @@ void Withdrawal::OnMaxtextPasssure()
 	ccharge.Format("%.2f", atof(GetFieldValue(2)) - charge);
 	scharge.Format("%.2f", charge);
 	GetRecord("update client set 账户余额=" + ccharge + " where 账号='" + ID + "'");
-	GetRecord("insert into activity (姓名,账号,交易金额,交易时间,操作) values ('" + name + "','" + ID + "','" + scharge + "','" + time.Format("%Y/%m/%d %H:%M:%S") + "','取款')");
+	GetRecord("insert into activity (姓名,账号,交易金额,交易时间,操作) values ('" + name + "','" + ID + "','" + scharge + "',#" + time.Format("%Y/%m/%d %H:%M:%S") + "#,'取款')");
 	GetRecord("select 姓名,账号,交易金额,交易时间 from activity where 操作='取款'");
 	while (!m_pRecordset->adoEOF)
 	{

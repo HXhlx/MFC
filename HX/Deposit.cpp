@@ -164,7 +164,7 @@ void Deposit::OnMaxtextPasssure()
 	scharge.Format("%.2f", charge);
 	ccharge.Format("%.2f", atof(GetFieldValue(2)) + charge);
 	GetRecord("update client set 账户余额=" + ccharge + " where 账号='" + ID + "'");
-	GetRecord("insert into activity (姓名,账号,交易金额,交易类型,交易时间,到期时间,操作) values ('" + name + "','" + ID + "','" + scharge + "','" + stype + "','" + timestart.Format("%Y/%m/%d %H:%M:%S") + "','" + timend.Format("%Y/%m/%d %H:%M:%S") + "','存款')");
+	GetRecord("insert into activity (姓名,账号,交易金额,交易类型,交易时间,到期时间,操作) values ('" + name + "','" + ID + "','" + scharge + "','" + stype + "',#" + timestart.Format("%Y/%m/%d %H:%M:%S") + "#,#" + timend.Format("%Y/%m/%d %H:%M:%S") + "#,'存款')");
 	GetRecord("select 姓名,账号,交易金额,交易类型,交易时间,到期时间 from activity where 操作='存款'");
 	while (!m_pRecordset->adoEOF)
 	{
@@ -221,7 +221,7 @@ void Deposit::OnBnClickedClean()
 	if (n < 0)MessageBox("请选择要删除的用户!", "警告", MB_ICONWARNING);
 	else
 	{
-		GetRecord("delete from activity where 交易时间='" + information.GetItemText(n, 4) + "' and 账号='" + information.GetItemText(n, 1) + "' and 操作='存款'");
+		GetRecord("delete from activity where 交易时间=#" + information.GetItemText(n, 4) + "# and 账号='" + information.GetItemText(n, 1) + "' and 操作='存款'");
 		information.DeleteItem(n);
 	}
 }

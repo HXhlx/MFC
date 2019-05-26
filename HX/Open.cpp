@@ -145,7 +145,7 @@ void Open::OnBnClickedSignin()
 	}
 	information.InsertItem(information.GetItemCount(), s3[0]);
 	for (int i = 1; i < 5; i++)information.SetItemText(information.GetItemCount() - 1, i, s3[i]);
-	GetRecord("insert into client (身份证号,姓名,地址,移动电话,账号,密码,开户金额,账户余额,开户日期,账号类型) values ('" + idcard + "','" + name + "','" + sprovince1 + " " + scity1 + "','" + telephone + "','" + ID + "','" + password + "'," + scharge + "," + scharge + ",'" + time.Format("%Y/%m/%d %H:%M:%S") + "','" + stype + "')");
+	GetRecord("insert into client (身份证号,姓名,地址,移动电话,账号,密码,开户金额,账户余额,开户日期,账号类型) values ('" + idcard + "','" + name + "','" + sprovince1 + " " + scity1 + "','" + telephone + "','" + ID + "','" + password + "'," + scharge + "," + scharge + ",#" + time.Format("%Y/%m/%d %H:%M:%S") + "#,'" + stype + "')");
 	MessageBox("注册成功!");
 }
 
