@@ -29,4 +29,9 @@ public:
 	afx_msg void OnKillfocusPassword();
 	afx_msg void OnKillfocusPasssure();
 	afx_msg void OnMaxtextPasssure();
+	bool flag;
+	afx_msg void OnKillfocusId();
+	afx_msg void OnBnClickedClean();
+	int n;
+	afx_msg void OnClickInformation(NMHDR* pNMHDR, LRESULT* pResult);
 };

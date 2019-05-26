@@ -39,4 +39,8 @@ public:
 	double Ttime;
 	afx_msg void OnSelchangeTime();
 	bool flag;
+	afx_msg void OnKillfocusId();
+	afx_msg void OnBnClickedClean();
+	int n;
+	afx_msg void OnClickInformation(NMHDR* pNMHDR, LRESULT* pResult);
 };

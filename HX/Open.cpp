@@ -231,7 +231,7 @@ void Open::OnSelchangeType()
 	unsigned t = 1;
 	CString str, st;
 	ID = "";
-	time = CTime::GetCurrentTime();
+	time = COleDateTime::GetCurrentTime();
 	if (stype == "»îÆÚ")ID += "622752";
 	else ID += "409666";
 	ID += time.Format("%Y%m%d");

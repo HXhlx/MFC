@@ -23,6 +23,7 @@ Deposit::Deposit(CWnd* pParent /*=NULL*/)
 {
 	flag = true;
 	Ttime = 0.25;
+	n = -1;
 }
 
 Deposit::~Deposit()
@@ -55,6 +56,9 @@ BEGIN_MESSAGE_MAP(Deposit, CDialogEx)
 	ON_EN_KILLFOCUS(IDC_PASSSURE, &Deposit::OnKillfocusPasssure)
 	ON_EN_MAXTEXT(IDC_PASSSURE, &Deposit::OnMaxtextPasssure)
 	ON_CBN_SELCHANGE(IDC_TIME, &Deposit::OnSelchangeTime)
+	ON_EN_KILLFOCUS(IDC_ID, &Deposit::OnKillfocusId)
+	ON_BN_CLICKED(IDC_CLEAN, &Deposit::OnBnClickedClean)
+	ON_NOTIFY(NM_CLICK, IDC_INFORMATION, &Deposit::OnClickInformation)
 END_MESSAGE_MAP()
 
 
@@ -156,13 +160,11 @@ void Deposit::OnMaxtextPasssure()
 	}
 	COleDateTimeSpan timespan(long(365 * Ttime), 0, 0, 0);
 	COleDateTime timestart = COleDateTime::GetCurrentTime(), timend = timestart + timespan;
-	CString scharge, ccharge, Timend, name = GetFieldValue(0);
+	CString scharge, ccharge, name = GetFieldValue(0);
 	scharge.Format("%.2f", charge);
 	ccharge.Format("%.2f", atof(GetFieldValue(2)) + charge);
-	if (stype == "活期")Timend = "-";
-	else Timend = timend.Format("%Y/%m/%d %H:%M:%S");
 	GetRecord("update client set 账户余额=" + ccharge + " where 账号='" + ID + "'");
-	GetRecord("insert into activity (姓名,账号,交易金额,交易类型,交易时间,到期时间,操作) values ('" + name + "','" + ID + "','" + scharge + "','" + stype + "','" + timestart.Format("%Y/%m/%d %H:%M:%S") + "','" + Timend + "','存款')");
+	GetRecord("insert into activity (姓名,账号,交易金额,交易类型,交易时间,到期时间,操作) values ('" + name + "','" + ID + "','" + scharge + "','" + stype + "','" + timestart.Format("%Y/%m/%d %H:%M:%S") + "','" + timend.Format("%Y/%m/%d %H:%M:%S") + "','存款')");
 	GetRecord("select 姓名,账号,交易金额,交易类型,交易时间,到期时间 from activity where 操作='存款'");
 	while (!m_pRecordset->adoEOF)
 	{
@@ -176,35 +178,18 @@ void Deposit::OnMaxtextPasssure()
 void Deposit::Rate()
 {
 	// TODO: 在此处添加实现代码.
+	CString st[] = { "三个月","半年","一年","两年","三年" };
+	double ra[] = { 0.0235,0.0255,0.0275,0.0335,0.04 }, Tt[] = { 0.25,0.5,1,2,3 };
 	if (stype == "活期")
 	{
 		rate = 0.0035;
 		Ttime = 0;
 	}
-	else if (stime == "三个月")
+	else for (int i = 0; i < 5; i++)if (stime == st[i])
 	{
-		Ttime = 0.25;
-		rate = 0.0235;
-	}
-	else if (stime == "半年")
-	{
-		Ttime = 0.5;
-		rate = 0.0255;
-	}
-	else if (stime == "一年")
-	{
-		Ttime = 1;
-		rate = 0.0275;
-	}
-	else if (stime == "两年")
-	{
-		Ttime = 2;
-		rate = 0.0335;
-	}
-	else if (stime == "三年")
-	{
-		Ttime = 3;
-		rate = 0.04;
+		Ttime = Tt[i];
+		rate = ra[i];
+		break;
 	}
 	UpdateData(FALSE);
 }
@@ -215,4 +200,37 @@ void Deposit::OnSelchangeTime()
 	// TODO: 在此添加控件通知处理程序代码
 	UpdateData();
 	Rate();
+}
+
+
+void Deposit::OnKillfocusId()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData();
+	if (ID.GetLength() < 17)
+	{
+		flag = false;
+		MessageBox("请输入17位银行账号!", "警告", MB_ICONWARNING);
+	}
+}
+
+
+void Deposit::OnBnClickedClean()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (n < 0)MessageBox("请选择要删除的用户!", "警告", MB_ICONWARNING);
+	else
+	{
+		GetRecord("delete from activity where 交易时间='" + information.GetItemText(n, 4) + "' and 账号='" + information.GetItemText(n, 1) + "' and 操作='存款'");
+		information.DeleteItem(n);
+	}
+}
+
+
+void Deposit::OnClickInformation(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	n = pNMItemActivate->iItem;
+	*pResult = 0;
 }
